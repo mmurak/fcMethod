@@ -1,0 +1,121 @@
+class GlobalManager {
+	constructor() {
+		this.entry = document.getElementById("Entry");
+		this.entry.addEventListener("input", () => {
+			if (this.entry.value.match(/[^\d\/.]/))  return;
+			if (this.entry.value.match(/^\s*$/)) {
+				fillMessage();
+				return;
+			}
+			const pvalue = preProcess(this.entry.value);
+			const regexp = new RegExp("^" + pvalue);
+			search(regexp);
+		});
+		this.entry.addEventListener("keydown", (evt) => {
+			if (evt.key == "Escape") {
+				this.entry.value = "";
+				fillMessage();
+			}
+		});
+		this.resultArea = document.getElementById("ResultArea");
+		this.mondai = document.getElementById("Mondai");
+		this.kaitou = "";
+		this.cheat = document.getElementById("Cheat");
+		this.cheat.addEventListener("mousedown", () => {
+			if (this.mondai.innerHTML != "") {
+				this.cheat.innerHTML = this.kaitou;
+			}
+		});
+		this.kossori = "チラ見！"
+		this.cheat.innerHTML = this.kossori;
+		this.cheat.addEventListener("mouseup", () => {
+			this.cheat.innerHTML = this.kossori;
+			this.entry.focus();
+		});
+		this.cheat.addEventListener("mouseleave", () => {
+			this.cheat.innerHTML = this.kossori;
+			this.entry.focus();
+		});
+		this.briefManual = "<h3>四角號碼→漢字検索</h3><ul><li>数値をそのまま入力してください（附角も5桁目の数字として指定します）。</li><li>特定できない桁がある場合、「/」を使って考えられる数値を羅列できます。<br>（例：2か8か分からない場合には「2/8」、5か6か7か分からない場合には「5/6/7」と指定できます。）</li><li>入力中の空白は検索時に除去されます。</li><li>「.」は0〜9のすべてに適合します。</ul><br>"
+	}
+}
+const G = new GlobalManager();
+fillMessage();
+G.entry.focus();
+
+function search(regexp) {
+	G.resultArea.innerHTML = "";
+	const table = document.createElement("table");
+	const colMax = 4;
+	let colSize = colMax + 1;
+	let row;
+	for (let entry of fourCorner) {
+		if (entry[1].match(regexp)) {
+			if (colSize > colMax) {
+				row = table.insertRow(-1);
+				colSize = 0;
+			}
+			const cell = row.insertCell(colSize);
+			colSize++;
+			cell.innerHTML = entry[0] + " (" + regulate(entry[1]) + ")";
+		}
+	}
+	G.resultArea.appendChild(table);
+}
+
+function preProcess(content) {
+	content = content.replaceAll(/\s/g, "");
+	let novoContent = "";
+	let newContent = "";
+	do {
+		novoContent = content.replace(/(\d)\/(\d)/, "[$1$2]");
+		if (novoContent == content) {
+			return content;		// EXIT POINT
+		}
+		content = novoContent;
+		newContent = "";
+		do {
+			newContent = content.replace(/\]\/(\d)/, "$1]");
+			if (newContent == content) {
+				break;
+			}
+			content = newContent;
+		} while (true);
+	} while (true);
+
+}
+
+function regulate(str) {
+	return str.slice(0, 4) + "." + str.slice(4);
+}
+
+function randomKanji() {
+	const ptr = Math.trunc(Math.random() * fourCorner.length);
+	G.kaitou = regulate(fourCorner[ptr][1]);
+	G.mondai.innerHTML = fourCorner[ptr][0];
+	G.entry.value = "";
+	fillMessage();
+	G.entry.focus();
+}
+
+function kanjiToFC() {
+	const kanji = prompt("漢字を1文字入力してください：");
+	if ((kanji == "") || (kanji == null)) return;
+	const target = kanji.substring(0, 1);
+	for (let db of fourCorner) {
+		if (target == db[0]) {
+			alert(target + ":" + regulate(db[1]));
+			G.entry.value = "";
+			fillMessage();
+			G.entry.focus();
+			return;
+		}
+	}
+	alert("登録されていません。");
+	G.entry.value = "";
+	fillMessage();
+	G.entry.focus();
+}
+function fillMessage() {
+	G.resultArea.innerHTML = G.briefManual + credit;
+}

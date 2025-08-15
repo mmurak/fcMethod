@@ -1,0 +1,11 @@
+table, th, td {
+	border: 1px solid black;
+	font-size: 120%;
+}
+#Mondai{
+	font-size: 120%;
+}
+a.Hidden  {
+	text-decoration: none;
+	color: black;
+}

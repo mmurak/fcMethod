@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="kiwi-bird-green.png">
+		<title>四角號碼トレーナー</title>
+		<link rel="stylesheet" href="./trainer.css"-->
+	</head>
+	<body id="Body">
+
+		<label for="Shikaku"><a class="Hidden" href="javascript:kanjiToFC();">四角號碼：</a>
+			<input type="textfield" id="Entry" name="Shikaku"></input>
+		</label>
+		<button onclick="randomKanji();">出題ボタン</button>
+		　<label id="Mondai"></label>
+		　　<button id="Cheat"></button>
+		<hr>
+		<div id="ResultArea">
+		</div>
+
+		<script src="./resources/unicodeORGdata.js"></script>
+		<script src="./scripts/trainer.js"></script>
+	</body>
+</html>
