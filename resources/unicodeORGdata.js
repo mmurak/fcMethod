@@ -1,4 +1,4 @@
-const credit = "※ 本ソフトウェアは、Unicode Character Database (UCD) のデータを使用しています。<br><br>Copyright © 1991-2025 Unicode, Inc. All rights reserved.<br><br>著作権、免責事項等、UCDの利用に関する詳細な情報については、<a href='https://www.unicode.org/copyright.html' target='_blank'>Unicode Terms of Use</a>をご確認ください。";
+const credit = "※ 本ウェブアプリは、Unicode Character Database (UCD) のデータを使用しています。<br><br>Copyright © 1991-2025 Unicode, Inc. All rights reserved.<br><br>著作権、免責事項等、UCDの利用に関する詳細な情報については、<a href='https://www.unicode.org/copyright.html' target='_blank'>Unicode Terms of Use</a>をご確認ください。";
 const fourCorner = [
 	["亠", "00000"],
 	["疒", "00100"],
