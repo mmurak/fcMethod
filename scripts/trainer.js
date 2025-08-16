@@ -54,6 +54,11 @@ function search(regexp) {
 			const cell = row.insertCell(colSize);
 			colSize++;
 			cell.innerHTML = entry[0] + " (" + regulate(entry[1]) + ")";
+			cell.addEventListener("click", (evt) => {
+				if (evt.shiftKey) {
+					copyToClipboard(entry[0]);
+				}
+			});
 			resultCount++;
 			if (resultCount > G.maxItems) {
 				const cell = row.insertCell(colSize);
@@ -137,4 +142,11 @@ function clearEntry() {
 
 function fillMessage() {
 	G.resultArea.innerHTML = G.briefManual + credit;
+}
+
+async function copyToClipboard(text) {
+	try {
+		await navigator.clipboard.writeText(text);
+	} catch (err) {
+	}
 }
