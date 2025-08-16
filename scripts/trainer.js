@@ -2,12 +2,14 @@ class GlobalManager {
 	constructor() {
 		this.entry = document.getElementById("Entry");
 		this.entry.addEventListener("input", () => {
-			if (this.entry.value.match(/[^\d\/.]/))  return;
-			if (this.entry.value.match(/^\s*$/)) {
+			let target = this.entry.value;
+			target = target.replaceAll(/\s/g, "");
+			if (target.match(/[^\d\/.]/))  return;
+			if (target.match(/^\s*$/)) {
 				fillMessage();
 				return;
 			}
-			const pvalue = preProcess(this.entry.value);
+			const pvalue = preProcess(target);
 			const regexp = new RegExp("^" + pvalue);
 			search(regexp);
 		});
