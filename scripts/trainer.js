@@ -11,6 +11,7 @@ class GlobalManager {
 			}
 			const pvalue = preProcess(target);
 			const regexp = new RegExp("^" + pvalue);
+			G.cycle = 0;
 			search(regexp);
 		});
 		this.entry.addEventListener("keydown", (evt) => {
@@ -30,7 +31,8 @@ class GlobalManager {
 		this.unkossori = "解答を隠す→";
 		this.cheatState = false;
 		this.briefManual = "<h3>「四角號碼」訓練アプリ</h3><ul><li>数値をそのまま入力してください（附角も5桁目の数字として指定します）。</li><li>特定できない桁がある場合、「/」を使って考えられる数値を羅列できます。<br>（例：2か8か分からない場合には「2/8」、5か6か7か分からない場合には「5/6/7」と指定できます。）</li><li>入力中の空白は検索時に除去されます。</li><li>「.」は0〜9のすべてに適合します。</li><li>入力欄左横の「四角號碼」をクリックすると、指定した漢字の四角号碼を調べることができます。</li></ul><br>";
-		this.maxItems = 100;
+		this.maxItems = 50;
+		this.cycle = 0;
 	}
 }
 const G = new GlobalManager();
@@ -41,12 +43,28 @@ G.entry.focus();
 function search(regexp) {
 	G.resultArea.innerHTML = "";
 	const table = document.createElement("table");
+	G.resultArea.appendChild(table);
 	const colMax = 4;
 	let colSize = colMax + 1;
 	let row;
-	let resultCount = 0;
+	let matchCount = 0;
+	const startPoint = G.maxItems * G.cycle;
+	const endPoint = G.maxItems * (G.cycle + 1);
+	if (G.cycle > 0) {
+		row = table.insertRow(-1);
+		const cell = row.insertCell(0);
+		cell.innerHTML = "　<< 前 <<";
+		cell.style = "color: green;";
+		cell.addEventListener("click", (evt) => {
+			G.cycle--;
+			search(regexp);
+			return;
+		});
+	}
 	for (let entry of fourCorner) {
 		if (entry[1].match(regexp)) {
+			matchCount++;
+			if (matchCount <= startPoint) continue;
 			if (colSize > colMax) {
 				row = table.insertRow(-1);
 				colSize = 0;
@@ -59,15 +77,20 @@ function search(regexp) {
 					copyToClipboard(entry[0]);
 				}
 			});
-			resultCount++;
-			if (resultCount > G.maxItems) {
-				const cell = row.insertCell(colSize);
-				cell.innerHTML = "　...More";
-				break;
+			if (matchCount >= endPoint) {
+				row = table.insertRow(-1);
+				const cell = row.insertCell(0);
+				cell.innerHTML = "　>> 次 >>";
+				cell.style = "color: green;";
+				cell.addEventListener("click", (evt) => {
+					G.cycle++;
+					search(regexp);
+					return;
+				});
+				return;
 			}
 		}
 	}
-	G.resultArea.appendChild(table);
 }
 
 function preProcess(content) {
@@ -93,7 +116,7 @@ function preProcess(content) {
 }
 
 function regulate(str) {
-	return str.slice(0, 4) + "." + str.slice(4);
+	return str.slice(0, 4) + ".<span class='subscript'>" + str.slice(4) + "</span>";
 }
 
 function kanjiToFC() {
