@@ -116,7 +116,7 @@ function preProcess(content) {
 }
 
 function regulate(str) {
-	return str.slice(0, 4) + ".<span class='subscript'>" + str.slice(4) + "</span>";
+	return str.slice(0, 4) + "<span class='subscript'>" + str.slice(4) + "</span>";
 }
 
 function kanjiToFC() {
