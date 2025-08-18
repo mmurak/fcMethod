@@ -73,9 +73,9 @@ function search(regexp) {
 			colSize++;
 			cell.innerHTML = entry[0] + " (" + regulate(entry[1]) + ")";
 			cell.addEventListener("click", (evt) => {
-				if (evt.shiftKey) {
+//				if (evt.shiftKey) {
 					copyToClipboard(entry[0]);
-				}
+//				}
 			});
 			if (matchCount >= endPoint) {
 				row = table.insertRow(-1);

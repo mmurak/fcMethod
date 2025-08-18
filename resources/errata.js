@@ -4,6 +4,7 @@ const errata = {
 	"契": "57430",
 	"奷": "42440",
 	"佽": "27282",
+	"荊": "42400",
 };
 
 for (let i = 0; i < fourCorner.length; i++) {
