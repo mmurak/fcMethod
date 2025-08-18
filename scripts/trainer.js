@@ -53,7 +53,7 @@ function search(regexp) {
 	if (G.cycle > 0) {
 		row = table.insertRow(-1);
 		const cell = row.insertCell(0);
-		cell.innerHTML = "　<< 前 <<";
+		cell.innerHTML = "　<< 前";
 		cell.style = "color: green;";
 		cell.addEventListener("click", (evt) => {
 			G.cycle--;
@@ -80,7 +80,7 @@ function search(regexp) {
 			if (matchCount >= endPoint) {
 				row = table.insertRow(-1);
 				const cell = row.insertCell(0);
-				cell.innerHTML = "　>> 次 >>";
+				cell.innerHTML = "　次 >>";
 				cell.style = "color: green;";
 				cell.addEventListener("click", (evt) => {
 					G.cycle++;
@@ -119,13 +119,17 @@ function regulate(str) {
 	return str.slice(0, 4) + "<span class='subscript'>" + str.slice(4) + "</span>";
 }
 
+function dotNotation(str) {
+	return str.slice(0, 4) + "." + str.slice(4);
+}
+
 function kanjiToFC() {
 	const kanji = prompt("漢字を1文字入力してください：");
 	if ((kanji == "") || (kanji == null)) return;
 	const target = kanji.substring(0, 1);
 	for (let db of fourCorner) {
 		if (target == db[0]) {
-			alert(target + ":" + regulate(db[1]));
+			alert(target + ":" + dotNotation(db[1]));
 			clearEntry();
 			return;
 		}
