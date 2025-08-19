@@ -8,7 +8,8 @@ const errata = {
 	"倢": "25281",
 	"儚": "24227",
 	"儤": "26232",
-};
+	"纊": "20986",
+};	//
 
 for (let i = 0; i < fourCorner.length; i++) {
 	const kanji = fourCorner[i][0];
