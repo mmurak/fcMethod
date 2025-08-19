@@ -1,12 +1,11 @@
 class GlobalManager {
 	constructor() {
-		this.entry = document.getElementById("Entry");
+		this.entry = document.getElementById("FCEntry");
 		this.entry.addEventListener("input", () => {
 			let target = this.entry.value;
 			target = target.replaceAll(/\s/g, "");
 			if (target.match(/[^\d\/.]/))  return;
 			if (target.match(/^\s*$/)) {
-				fillMessage();
 				return;
 			}
 			const pvalue = preProcess(target);
@@ -14,23 +13,27 @@ class GlobalManager {
 			G.cycle = 0;
 			search(regexp);
 		});
-		this.entry.addEventListener("keydown", (evt) => {
+		this.kanjiEntry = document.getElementById("KanjiEntry");
+		this.kanjiEntry.addEventListener("change", (evt) => {
+			kanjiToFC();
+		});
+		document.addEventListener("keydown", (evt) => {
 			if (evt.key == "Escape") {
 				clearEntry();
 			}
 		});
+/*
+		document.addEventListener("visibilitychange", (evt) => {
+			if (!document.hidden) {
+				clearEntry();
+				this.entry.focus();
+			}
+		});
+*/
 		this.entry.addEventListener("focus", () => {
 			this.entry.select();
 		});
 		this.resultArea = document.getElementById("ResultArea");
-		this.mondai = document.getElementById("Mondai");
-		this.kaitou = "";
-		this.reveal = document.getElementById("Reveal");
-		this.kotae = document.getElementById("Kotae");
-		this.kossori = "解答を見る→";
-		this.unkossori = "解答を隠す→";
-		this.cheatState = false;
-		this.briefManual = "<h3>「四角號碼」訓練アプリ</h3><ul><li>数値をそのまま入力してください（附角も5桁目の数字として指定します）。</li><li>特定できない桁がある場合、「/」を使って考えられる数値を羅列できます。<br>（例：2か8か分からない場合には「2/8」、5か6か7か分からない場合には「5/6/7」と指定できます。）</li><li>入力中の空白は検索時に除去されます。</li><li>「.」は0〜9のすべてに適合します。</li><li>入力欄左横の「四角號碼」をクリックすると、指定した漢字の四角号碼を調べることができます。</li></ul><br>";
 		this.maxItems = 50;
 		this.cycle = 0;
 	}
@@ -51,8 +54,7 @@ fourCorner.sort((a, b) => {
 	}
 	return 0;
 });
-fillMessage();
-G.reveal.innerHTML = G.kossori;
+
 G.entry.focus();
 
 function search(regexp) {
@@ -139,51 +141,30 @@ function dotNotation(str) {
 }
 
 function kanjiToFC() {
-	const kanji = prompt("漢字を1文字入力してください：");
-	if ((kanji == "") || (kanji == null)) return;
+	const kanji = G.kanjiEntry.value;
+	if (kanji == "") {
+		clearEntry();
+		return;
+	}
 	const target = kanji.substring(0, 1);
+	G.kanjiEntry.value = target;
 	for (let db of fourCorner) {
 		if (target == db[0]) {
-			alert(target + ":" + dotNotation(db[1]));
-			clearEntry();
+			G.entry.value = db[1];
+			const regexp = new RegExp("^" + db[1]);
+			G.cycle = 0;
+			search(regexp);
 			return;
 		}
 	}
-	alert("登録されていません。");
-	clearEntry();
-}
-
-function randomKanji() {
-	if (G.cheatState) {
-		toggleReveal();
-	}
-	const ptr = Math.trunc(Math.random() * fourCorner.length);
-	G.kaitou = regulate(fourCorner[ptr][1]);
-	G.mondai.innerHTML = fourCorner[ptr][0];
-	clearEntry();
-}
-
-function toggleReveal() {
-	if (G.cheatState) {
-		G.kotae.innerHTML = "";
-		G.reveal.innerHTML = G.kossori;
-		G.cheatState = false;
-	} else {
-		G.kotae.innerHTML = G.kaitou;
-		G.reveal.innerHTML = G.unkossori;
-		G.cheatState = true;
-	}
-	G.entry.focus();
+	G.kanjiEntry.value += "...未登録。";
 }
 
 function clearEntry() {
 	G.entry.value = "";
-	fillMessage();
+	G.kanjiEntry.value = "";
+	G.resultArea.innerHTML = "";
 	G.entry.focus();
-}
-
-function fillMessage() {
-	G.resultArea.innerHTML = G.briefManual + credit;
 }
 
 async function copyToClipboard(text) {

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="kiwi-bird-blue.png">
+		<title>四角号碼変換ツール</title>
+		<link rel="stylesheet" href="./converter.css"-->
+	</head>
+	<body id="Body">
+		<header class="fixed-header">
+			<label for="Kanji">漢字入力：
+				<input type="textfield" id="KanjiEntry" class="EntryCommon" name="Kanji"></input>
+			</label>
+			<br>
+			<label for="Shikaku">四角號碼：
+				<input type="textfield" id="FCEntry" class="EntryCommon" name="Shikaku"></input>
+			</label>
+			<br>
+		</header>
+		<div id="ResultArea" class="Content"></div>
+
+		<script src="./resources/unicodeORGdata.js"></script>
+		<script src="./resources/errata.js"></script>
+		<script src="./resources/additions.js"></script>
+		<script src="./scripts/converter.js"></script>
+	</body>
+</html>
