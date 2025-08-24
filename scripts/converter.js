@@ -36,6 +36,7 @@ class GlobalManager {
 		this.resultArea = document.getElementById("ResultArea");
 		this.maxItems = 50;
 		this.cycle = 0;
+		this.clipboard = document.getElementById("Clipboard");
 	}
 }
 const G = new GlobalManager();
@@ -170,6 +171,7 @@ function clearEntry() {
 async function copyToClipboard(text) {
 	try {
 		await navigator.clipboard.writeText(text);
+		G.clipboard.innerHTML = text;
 	} catch (err) {
 	}
 }
