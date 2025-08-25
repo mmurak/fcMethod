@@ -16,8 +16,8 @@ table, th, td {
 	border: 1px solid black;
 	font-size: 120%;
 }
-#Mondai{
-	font-size: 120%;
+#Mondai,#Kotae{
+	font-size: 150%;
 }
 a.Hidden  {
 	text-decoration: none;
