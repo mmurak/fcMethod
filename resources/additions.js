@@ -47,6 +47,7 @@ const additions = [
 	["䨄", "80614"],
 	["𦙾", "77214"],
 	["韴", "01627"],
+	["蝄", "57120"],
 ];	//
 
 fourCorner.push(...additions);
